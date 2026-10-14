@@ -1,0 +1,50 @@
+# Environment Variables & Secrets
+.env
+*.env
+*.pem
+*.key
+*.cert
+*.secret
+
+# Python & Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+env/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Logs & Runtime
+*.log
+logs/
+*.pid
+
+# Benchmark & Test Outputs (raw runtime dumps)
+tmp/
+temp/
+
+# LaTeX Auxiliary Compilation Files
+docs/latex/*.aux
+docs/latex/*.bbl
+docs/latex/*.blg
+docs/latex/*.log
+docs/latex/*.out
+docs/latex/*.toc
+docs/latex/*.synctex.gz
+docs/latex/*.fdb_latexmk
+docs/latex/*.fls
+*.aux
+*.bbl
+*.blg
+*.synctex.gz
+
+# IDE & OS Artifacts
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

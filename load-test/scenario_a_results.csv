@@ -1,0 +1,4 @@
+scenario,total_req,success_req,failed_req,avg_latency_s,elapsed_time_s,accepted_cumulative_s,rejected_cumulative_s,cpu_peak_pct,cpu_post_test_pct
+A_unprotected,100,0,100,2.43,4.55,0.00,243.26,0.0,0.0
+
+# Spiegazione Tempo di Esecuzione: Il tempo totale reale di esecuzione del test (elapsed time) non scala linearmente con le richieste accettate poiche tutte le richieste vengono inviate in parallelo (concorrenza). Le richieste respinte/fallite liberano il client quasi subito ma consumano comunque frazioni di secondo per l'overhead di rete/TCP, mentre le richieste accettate competono per le risorse di inferenza in parallelo sul backend.

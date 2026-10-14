@@ -1,0 +1,61 @@
+\documentclass[11pt,a4paper]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{geometry}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\geometry{top=2.5cm, bottom=2.5cm, left=3.0cm, right=2.5cm}
+\graphicspath{{../figures/}{../images/}}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!70!black,
+    citecolor=blue!70!black,
+    urlcolor=blue!70!black
+}
+
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{gray!10},
+    numbers=left,
+    numberstyle=\tiny\color{gray}
+}
+
+\title{\textbf{Cloud-Native Network Architecture for Defense-in-Depth of Enterprise AI Services}\\
+\large Mitigation of Volumetric DDoS and Semantic Resource Exhaustion}
+\author{\textbf{Davide Torelli}}
+\date{2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+The rapid proliferation of Large Language Model (LLM) inference microservices across enterprise cloud environments has exposed modern infrastructures to critical asymmetric Denial-of-Service (DoS) and Distributed Denial-of-Service (DDoS) vulnerabilities. Due to the high computational complexity of transformer-based autoregressive token generation, an unauthenticated client transmitting sub-kilobyte HTTP requests can force hundreds of megabytes of VRAM allocation and full GPU/CPU core saturation. 
+
+This paper presents \textbf{C-DIDA} (\textit{Cloud Defense-in-Depth for Enterprise AI}), an end-to-end, multi-tier defense architecture designed to safeguard enterprise AI endpoints against Layer 4 and Layer 7 volumetric attacks and semantic resource exhaustion. The architecture coordinates three sequential inspection tiers: (1) a perimeter reverse proxy executing early volumetric rate limiting with instantaneous sub-2ms drop latency; (2) a high-throughput API Gateway enforcing cryptographic JSON Web Token (JWT) Role-Based Access Control (RBAC) coupled with atomic Redis-backed sliding-window rate limiters; and (3) an inline heuristic Payload Inspector Intrusion Detection System (IDS) that dynamically filters repetitive token floods and oversized payloads. Experimental validation demonstrates that the architecture mitigates 95\% of hostile perimeter bursts, reducing backend server CPU saturation from 98.5\% under unconstrained attack down to 10.0\%, while preserving non-disruptive sub-4ms ingress latencies for legitimate users.
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\input{chapter1_intro}
+\input{chapter2_architecture}
+\input{chapter3_defense_layers}
+\input{chapter4_evaluation}
+\input{chapter5_tradeoffs}
+\input{chapter6_bib}
+
+\end{document}

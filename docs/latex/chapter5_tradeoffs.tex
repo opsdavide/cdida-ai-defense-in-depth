@@ -1,0 +1,20 @@
+\chapter{Design Trade-offs, Limitations, and Future Work}
+\label{chap:tradeoffs}
+
+This chapter critically reviews engineering design choices, outlines current system limitations, and explores directions for future enterprise enhancements.
+
+\section{Architectural Trade-offs}
+\begin{itemize}
+    \item \textbf{Redis vs. In-Memory Gateway Cache}: In-memory dictionaries avoid network round-trips but fail across distributed multi-worker Gateway deployments. Redis provides shared state and atomicity via Lua scripts at the cost of a nominal 0.5ms network hop.
+    \item \textbf{Sliding Window vs. Fixed Window}: Fixed windows permit double-rate spikes at interval boundaries. Sliding-window logs prevent micro-bursts with predictable memory overhead ($O(N_{\text{active}})$).
+    \item \textbf{Docker Compose vs. Kubernetes}: Docker Compose was chosen for deterministic local reproducibility and minimal networking virtualization overhead (CNI overlay), while remaining architecturally ready for Kubernetes Ingress migration.
+\end{itemize}
+
+\section{System Limitations}
+\begin{enumerate}
+    \item \textbf{Symmetric JWT Cryptography}: The prototype implements symmetric HMAC-SHA256 (\texttt{HS256}). Production enterprise environments should transition to asymmetric public/private key pairs (\texttt{RS256} or \texttt{ES256}) where only the identity provider holds the signing key.
+    \item \textbf{Semantic Classification Breadth}: The heuristic token repetition inspector targets structural lexical spam. Detecting sophisticated adversarial prompt injections requires dedicated vector embedding guardrails (e.g., Llama Guard).
+\end{enumerate}
+
+\section{Conclusions}
+The \textbf{C-DIDA} architecture demonstrates that coordinating perimeter volumetric filtering, cryptographic RBAC, and payload inspection creates a highly resilient defense for cloud-native AI microservices, dropping 95\% of hostile traffic with sub-2ms latency and slashing backend resource exhaustion by nearly 90\%.

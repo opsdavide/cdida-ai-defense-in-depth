@@ -1,0 +1,60 @@
+version: '3.8'
+
+networks:
+  frontend_net:
+    driver: bridge
+  backend_net:
+    driver: bridge
+    internal: true
+
+services:
+  redis:
+    image: redis:alpine
+    container_name: redis-cache
+    networks:
+      - backend_net
+    restart: unless-stopped
+
+  ai-application-server:
+    build:
+      context: ./ai-server
+      dockerfile: Dockerfile
+    container_name: ai-application-server
+    # Port 5001 is published ONLY to allow load-test/attack_simulation.py (Scenario A)
+    # to target the AI server directly from the host. In Scenario B, the gateway proxies it internally.
+    ports:
+      - "5001:5001"
+    networks:
+      - frontend_net
+      - backend_net
+    restart: unless-stopped
+
+  ai-api-gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    container_name: ai-api-gateway
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    networks:
+      - frontend_net
+      - backend_net
+    depends_on:
+      - redis
+      - ai-application-server
+    restart: unless-stopped
+
+  reverse-proxy:
+    image: nginx:alpine
+    container_name: nginx-reverse-proxy
+    ports:
+      - "8080:80"
+    volumes:
+      - ./reverse-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - frontend_net
+    depends_on:
+      - ai-api-gateway
+    restart: unless-stopped
